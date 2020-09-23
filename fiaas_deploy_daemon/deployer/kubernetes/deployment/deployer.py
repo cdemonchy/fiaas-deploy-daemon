@@ -186,6 +186,8 @@ class DeploymentDeployer(object):
                 fieldRef=ObjectFieldSelector(fieldPath="metadata.namespace"))),
             EnvVar(name="FIAAS_POD_NAME", valueFrom=EnvVarSource(
                 fieldRef=ObjectFieldSelector(fieldPath="metadata.name"))),
+            EnvVar(name="FIAAS_HOST_IP", valueFrom=EnvVarSource(
+                fieldRef=ObjectFieldSelector(fieldPath="status.hostIP"))),
         ])
 
         env.sort(key=lambda x: x.name)

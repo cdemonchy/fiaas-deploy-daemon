@@ -70,6 +70,11 @@ spec:
           value: v3-data-examples-single-replica-singleton
         - name: FIAAS_ENVIRONMENT
           value: test
+        - name: FIAAS_HOST_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+              apiVersion: "v1"
         - name: FIAAS_IMAGE
           value: IMAGE
         - name: FIAAS_INFRASTRUCTURE
