@@ -33,7 +33,6 @@ class DataDog(object):
             # TODO: Bug in k8s library allows us to mutate the default value here, so we need to take a copy
             env = list(main_container.env)
             env.extend(self._get_env_vars())
-            env.sort(key=lambda x: x.name)
             main_container.env = env
 
     def _create_datadog_container(self, app_spec, besteffort_qos_is_required):

@@ -492,8 +492,7 @@ def create_environment_variables(config, global_env=None, version="version", env
         _env_variables.update(global_env)
         _env_variables.update({"FIAAS_{}".format(k): v for k, v in global_env.items()})
 
-    env = [{'name': k, 'value': v} for k, v in _env_variables.items()]
-
+    env = []
     env.append({'name': 'FIAAS_REQUESTS_CPU', 'valueFrom': {'resourceFieldRef': {
         'containerName': 'testapp', 'resource': 'requests.cpu', 'divisor': 1}}})
     env.append({'name': 'FIAAS_REQUESTS_MEMORY', 'valueFrom': {'resourceFieldRef': {
@@ -504,8 +503,10 @@ def create_environment_variables(config, global_env=None, version="version", env
         'containerName': 'testapp', 'resource': 'limits.memory', 'divisor': 1}}})
     env.append({'name': 'FIAAS_NAMESPACE', 'valueFrom': {'fieldRef': {'fieldPath': 'metadata.namespace'}}})
     env.append({'name': 'FIAAS_POD_NAME', 'valueFrom': {'fieldRef': {'fieldPath': 'metadata.name'}}})
+    env.append({'name': 'FIAAS_HOST_IP', 'valueFrom': {'fieldRef': {'fieldPath': 'status.hostIP'}}})
 
-    env.sort(key=lambda x: x["name"])
+    env.extend([{'name': k, 'value': v} for k, v in _env_variables.items()])
+
     return env
 
 

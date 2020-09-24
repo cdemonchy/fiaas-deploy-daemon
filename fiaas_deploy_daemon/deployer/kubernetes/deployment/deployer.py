@@ -167,10 +167,8 @@ class DeploymentDeployer(object):
         # fiaas_managed_env overrides global_env overrides legacy_fiaas_env
         static_env = merge_dicts(self._legacy_fiaas_env, self._global_env, fiaas_managed_env)
 
-        env = [EnvVar(name=name, value=value) for name, value in static_env.items()]
-
         # FIAAS managed environment variables using the downward API
-        env.extend([
+        env = [
             EnvVar(name="FIAAS_REQUESTS_CPU", valueFrom=EnvVarSource(
                 resourceFieldRef=ResourceFieldSelector(containerName=app_spec.name, resource="requests.cpu",
                                                        divisor=1))),
@@ -188,9 +186,9 @@ class DeploymentDeployer(object):
                 fieldRef=ObjectFieldSelector(fieldPath="metadata.name"))),
             EnvVar(name="FIAAS_HOST_IP", valueFrom=EnvVarSource(
                 fieldRef=ObjectFieldSelector(fieldPath="status.hostIP"))),
-        ])
+        ]
 
-        env.sort(key=lambda x: x.name)
+        env.extend([EnvVar(name=name, value=value) for name, value in static_env.items()])
 
         return env
 
